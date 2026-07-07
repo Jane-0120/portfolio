@@ -1,0 +1,375 @@
+/* =========================================================
+   Portfolio — styles.css
+   색상/폰트/간격 등은 아래 :root 변수에서 한 번에 조정 가능
+   ========================================================= */
+
+:root{
+  --bg:#ffffff;
+  --ink:#111111;
+  --ink-soft:#8a8a86;
+  --line:#e7e7e3;
+  --paper:#f4f3ef;
+  --white:#ffffff;
+  --ease:cubic-bezier(.76,0,.24,1);
+  --ease-soft:cubic-bezier(.33,1,.68,1);
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{
+  font-family:"Avenir Next","Avenir","Pretendard",sans-serif;
+  background:var(--bg);
+  color:var(--ink);
+  overflow:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ---------- STAGE ---------- */
+.stage{position:fixed;inset:0;overflow:hidden}
+
+/* ---------- HEADER OVERLAY ---------- */
+.head{
+  position:absolute;inset:0;
+  z-index:40;pointer-events:none;
+  padding:34px 40px;
+}
+.head > *{pointer-events:auto}
+
+.brand{
+  position:absolute;top:34px;left:40px;
+  font-family:"Avenir Next","Avenir","Pretendard",sans-serif;font-weight:400;
+  font-size:15px;line-height:1.45;letter-spacing:.02em;
+  color:var(--ink);
+  transition:opacity .5s var(--ease),transform .6s var(--ease);
+}
+
+.hero-title{
+  position:absolute;top:44px;right:40px;
+  font-family:"Avenir Next","Avenir","Pretendard",sans-serif;font-weight:400;
+  font-size:clamp(28px,3.9vw,60px);
+  line-height:1.02;letter-spacing:.005em;
+  text-align:left;max-width:60%;
+  transition:opacity .6s var(--ease),transform .6s var(--ease),color .6s var(--ease);
+}
+
+.contact-btn{
+  position:absolute;top:calc(3vw);right:40px;
+  font-family:"Avenir Next","Avenir","Pretendard",sans-serif;font-weight:400;
+  font-size:13px;letter-spacing:.14em;
+  padding:13px 26px;border:1.4px solid var(--ink);
+  background:transparent;color:var(--ink);
+  border-radius:40px;cursor:pointer;
+  transition:background .4s var(--ease),color .4s var(--ease),border-color .4s var(--ease),opacity .5s var(--ease),transform .5s var(--ease);
+}
+.contact-btn:hover{background:var(--ink);color:var(--white)}
+
+/* close button (expanded only) */
+.close-btn{
+  position:absolute;top:32px;right:40px;z-index:60;
+  width:44px;height:44px;border-radius:50%;
+  border:1.4px solid rgba(255,255,255,.6);
+  background:rgba(255,255,255,.06);backdrop-filter:blur(4px);
+  color:#fff;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;pointer-events:none;transform:scale(.8);
+  transition:opacity .5s var(--ease) .2s,transform .5s var(--ease) .2s,background .3s;
+}
+.close-btn:hover{background:rgba(255,255,255,.18)}
+.close-btn svg{width:16px;height:16px}
+.stage.expanded .close-btn{opacity:1;pointer-events:auto;transform:scale(1)}
+
+/* ---------- GRID ---------- */
+.grid{
+  position:absolute;inset:0;z-index:10;
+  display:flex;
+}
+.col{
+  position:relative;flex:1 1 0%;
+  overflow:hidden;cursor:pointer;
+  border-right:1px solid var(--line);
+  transition:flex-grow .95s var(--ease);
+  min-width:0;
+}
+.col:last-child{border-right:none}
+
+.col-inner{
+  position:absolute;inset:0;
+  height:100%;overflow:hidden;
+}
+
+/* hero block of each column */
+.col-hero{
+  position:relative;
+  height:100vh;width:100%;
+  display:flex;align-items:flex-end;
+  overflow:hidden;
+}
+
+/* rising media */
+.col-media{
+  position:absolute;inset:0;
+  transform:translateY(101%);
+  transition:transform .85s var(--ease);
+  will-change:transform;
+}
+.col-media img{
+  width:100%;height:100%;object-fit:cover;
+}
+/* dim layer — hover(grid) & expanded 모두 적용 */
+.col-media::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(
+    180deg,
+    rgba(10,10,10,.45) 0%,
+    rgba(10,10,10,.06) 36%,
+    rgba(10,10,10,.18) 62%,
+    rgba(10,10,10,.72) 100%
+  );
+  opacity:0;transition:opacity .7s var(--ease);
+}
+
+/* hover: raise media + dim (grid mode only) */
+.stage:not(.expanded) .col:hover .col-media{transform:translateY(0)}
+.stage:not(.expanded) .col:hover .col-media::after{opacity:1}
+
+/* hover 시 라벨 흰색으로 */
+.stage:not(.expanded) .col:hover .col-label{color:#fff}
+.stage:not(.expanded) .col:hover .col-index{color:#fff}
+
+/* label */
+.col-label{
+  position:absolute;left:34px;bottom:44px;z-index:5;
+  font-family:"Avenir Next","Avenir","Pretendard",sans-serif;font-weight:400;
+  font-size:clamp(20px,2vw,30px);line-height:1.04;
+  letter-spacing:.01em;color:var(--ink);
+  transition:color .6s var(--ease),opacity .5s var(--ease),transform .7s var(--ease);
+}
+.col-index{
+  position:absolute;left:34px;top:calc(50% - 6px);z-index:5;
+  font-family:"Avenir Next","Avenir","Pretendard",sans-serif;font-size:26px;color:var(--ink);
+  opacity:0;transform:translateY(8px);
+  transition:opacity .5s var(--ease),transform .6s var(--ease),color .6s;
+}
+.stage:not(.expanded) .col:hover .col-index{opacity:1;transform:translateY(0)}
+
+/* ---------- EXPANDED STATE ---------- */
+/* hide the home header content once a project is open */
+.stage.expanded .brand,
+.stage.expanded .hero-title,
+.stage.expanded .contact-btn{
+  opacity:0;pointer-events:none;
+  transform:translateY(-8px);
+}
+
+.stage.expanded .col{flex-grow:0;cursor:default}
+.stage.expanded .col.active{flex-grow:100}
+.stage.expanded .col:not(.active){pointer-events:none}
+.stage.expanded .col:not(.active) .col-label,
+.stage.expanded .col:not(.active) .col-media{opacity:0;transition:opacity .4s var(--ease)}
+.stage.expanded .col:not(.active){border-right-color:transparent}
+
+.stage.expanded .col.active{border-right:none}
+.stage.expanded .col.active .col-media{transform:translateY(0)}
+.stage.expanded .col.active .col-media::after{opacity:1}
+.stage.expanded .col.active .col-inner{overflow-y:auto;-webkit-overflow-scrolling:touch}
+.stage.expanded .col.active .col-index{opacity:0}
+
+/* label repositions large & white when active */
+.stage.expanded .col.active .col-label{
+  color:#fff;
+  font-size:clamp(30px,4.4vw,68px);
+  font-weight:400;line-height:.98;
+  left:40px;bottom:56px;
+}
+
+/* project meta appears in the active hero */
+.proj-meta{
+  position:absolute;z-index:6;color:#fff;
+  right:40px;bottom:60px;left:auto;max-width:360px;
+  text-align:right;
+  opacity:0;transform:translateY(14px);
+  transition:opacity .6s var(--ease) .25s,transform .6s var(--ease) .25s;
+  pointer-events:none;
+}
+.stage.expanded .col.active .proj-meta{opacity:1;transform:translateY(0)}
+.proj-meta .eyebrow{
+  font-family:"Avenir Next","Avenir","Pretendard",sans-serif;font-size:11px;letter-spacing:.22em;
+  text-transform:uppercase;opacity:.8;margin-bottom:14px;
+}
+.proj-meta p{
+  font-family:"Avenir Next","Avenir","Pretendard",sans-serif;font-weight:400;
+  font-size:15px;line-height:1.55;white-space:pre-line;
+}
+.scroll-hint{
+  position:absolute;right:40px;bottom:24px;z-index:6;
+  font-family:"Avenir Next","Avenir","Pretendard",sans-serif;font-size:12px;letter-spacing:.06em;
+  color:rgba(255,255,255,.85);
+  display:flex;align-items:center;gap:8px;
+  opacity:0;transition:opacity .5s var(--ease) .45s;pointer-events:none;
+}
+.stage.expanded .col.active .scroll-hint{opacity:1}
+.scroll-hint .arr{animation:bob 1.8s var(--ease-soft) infinite}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(4px)}}
+
+.asterisk{
+  position:absolute;z-index:6;font-size:34px;line-height:1;
+  color:#fff;left:50%;top:52%;
+  opacity:0;transition:opacity .5s var(--ease);
+  pointer-events:none;font-family:"Avenir Next","Avenir","Pretendard";
+}
+.stage:not(.expanded) .col:hover .asterisk{opacity:1}
+.stage.expanded .col.active .asterisk{opacity:0}
+
+/* ---------- DETAIL (scroll content) ---------- */
+.col-detail{
+  background:#fff;color:var(--ink);
+  padding:0 0 120px;
+  opacity:0;transition:opacity .6s var(--ease) .2s;
+}
+.stage.expanded .col.active .col-detail{opacity:1}
+.col-detail .intro{
+  max-width:1100px;margin:0 auto;
+  padding:120px 40px 90px;
+}
+.col-detail .intro .k{
+  font-family:"Avenir Next","Avenir","Pretendard";font-size:11px;letter-spacing:.22em;
+  text-transform:uppercase;color:var(--ink-soft);margin-bottom:22px;
+}
+.col-detail .intro h2{
+  font-family:"Avenir Next","Avenir","Pretendard";font-weight:400;
+  font-size:clamp(28px,3.6vw,46px);line-height:1.12;
+  margin-bottom:30px;white-space:pre-line;
+}
+.col-detail .intro p{
+  font-family:"Avenir Next","Avenir","Pretendard",sans-serif;
+  font-size:16px;line-height:1.85;color:#444;max-width:none;white-space:pre-line;
+}
+.col-detail .facts{
+  display:flex;gap:60px;flex-wrap:wrap;
+  margin-top:44px;padding-top:32px;border-top:1px solid var(--line);
+}
+.col-detail .facts div span{
+  display:block;font-family:"Avenir Next","Avenir","Pretendard";font-size:10.5px;
+  letter-spacing:.18em;text-transform:uppercase;color:var(--ink-soft);
+  margin-bottom:8px;
+}
+.col-detail .facts div strong{
+  font-family:"Avenir Next","Avenir","Pretendard";font-weight:400;font-size:16px;
+}
+.col-detail figure{margin:0 auto;max-width:1100px;padding:14px 40px}
+.col-detail figure img{
+  width:100%;display:block;
+}
+.col-detail .tall{max-width:820px}
+.col-detail .end{
+  text-align:center;padding:110px 40px 20px;
+  font-family:"Avenir Next","Avenir","Pretendard";font-weight:400;
+  font-size:clamp(24px,3vw,40px);color:var(--ink);
+}
+.col-detail .end .end-next{
+  display:block;margin:20px auto 0;font-family:"Avenir Next","Avenir","Pretendard";
+  font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft);
+  background:none;border:none;padding:4px 0;cursor:pointer;
+  transition:color .3s var(--ease);
+}
+.col-detail .end .end-next:hover{color:var(--ink)}
+
+/* ---------- CONTACT MODAL ---------- */
+.contact{
+  position:fixed;inset:0;z-index:100;
+  background:rgba(255,255,255,.0);backdrop-filter:blur(0px);
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;pointer-events:none;
+  transition:opacity .5s var(--ease),backdrop-filter .5s var(--ease);
+}
+.contact.open{
+  opacity:1;pointer-events:auto;
+  background:rgba(246,245,241,.78);backdrop-filter:blur(14px);
+}
+.contact-card{
+  text-align:center;transform:translateY(20px);
+  transition:transform .6s var(--ease);
+}
+.contact.open .contact-card{transform:translateY(0)}
+.contact-card .k{
+  font-family:"Avenir Next","Avenir","Pretendard";font-size:11px;letter-spacing:.24em;
+  text-transform:uppercase;color:var(--ink-soft);margin-bottom:28px;
+}
+.contact-card h3{
+  font-family:"Avenir Next","Avenir","Pretendard";font-weight:400;
+  font-size:clamp(24px,5vw,48px);line-height:1.25;margin-bottom:40px;
+}
+.contact-list{display:flex;flex-direction:column;gap:6px;margin-bottom:44px}
+.contact-list a{
+  font-family:"Avenir Next","Avenir","Pretendard";font-weight:400;font-size:clamp(18px,2.4vw,26px);
+  color:var(--ink);text-decoration:none;position:relative;
+  display:inline-block;padding:4px 0;transition:opacity .3s;
+}
+.contact-list a::after{
+  content:"";position:absolute;left:0;bottom:0;height:1px;width:0;
+  background:var(--ink);transition:width .4s var(--ease);
+}
+.contact-list a:hover::after{width:100%}
+.contact-social{display:flex;gap:26px;justify-content:center}
+.contact-social a{
+  font-family:"Avenir Next","Avenir","Pretendard";font-size:12px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--ink-soft);text-decoration:none;
+  transition:color .3s;
+}
+.contact-social a:hover{color:var(--ink)}
+.contact-close{
+  position:absolute;top:32px;right:40px;
+  width:44px;height:44px;border-radius:50%;border:1.4px solid var(--ink);
+  background:transparent;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:background .3s,color .3s;color:var(--ink);
+}
+.contact-close:hover{background:var(--ink);color:#fff}
+.contact-close svg{width:16px;height:16px}
+
+/* ---------- RESPONSIVE ---------- */
+@media(max-width:860px){
+  body{overflow-y:auto}
+  .head{position:absolute}
+  .brand{font-size:13px;left:24px}
+  .hero-title{position:static;max-width:none;text-align:left;
+    font-size:34px;padding:96px 24px 0;right:auto}
+  .contact-btn{position:fixed;top:auto;bottom:20px;left:50%;right:auto;
+    transform:translateX(-50%);z-index:70}
+  .grid{position:static;flex-direction:column;height:auto;min-height:100vh;
+    padding-top:110px}
+  .col{flex:none;height:24vh;min-height:150px;border-right:none;
+    border-bottom:1px solid var(--line);transition:none}
+  .col-inner{position:absolute}
+  .col-hero{height:100%}
+  .col-media{transform:translateY(0);opacity:1}
+  .col-media::after{opacity:1}
+  .col-label{bottom:24px;left:24px;font-size:24px;color:#fff}
+  .asterisk{display:none}
+
+  .stage.expanded{position:fixed;inset:0;z-index:90;background:#000}
+  .stage.expanded .grid{position:absolute;inset:0;padding-top:0;flex-direction:column;height:100%}
+  .stage.expanded .col{display:none}
+  .stage.expanded .col.active{display:block;height:100%;flex:none}
+  .stage.expanded .col.active .col-inner{position:absolute;inset:0;overflow-y:auto}
+  .stage.expanded .col.active .col-hero{
+    height:100vh;
+    display:flex;flex-direction:column;justify-content:flex-end;align-items:flex-start;
+    padding:24px;gap:14px;
+  }
+  .stage.expanded .col.active .col-media{opacity:1}
+  .stage.expanded .col.active .col-label,
+  .stage.expanded .col.active .proj-meta,
+  .stage.expanded .col.active .scroll-hint{
+    position:relative;top:auto;left:auto;right:auto;bottom:auto;
+  }
+  .stage.expanded .col.active .col-label{font-size:32px}
+  .proj-meta{text-align:left;max-width:none}
+  .scroll-hint{justify-content:flex-start}
+  .contact-btn{display:none}
+}
+
+@media(prefers-reduced-motion:reduce){
+  *{transition-duration:.001ms !important;animation-duration:.001ms !important}
+  .col-media{transform:translateY(0)}
+}
