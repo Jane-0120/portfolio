@@ -3,491 +3,57 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Jane Kim — Designer</title>
-<style>
-*{margin:0;padding:0;box-sizing:border-box;}
-:root{--bg:#F0EEE8;--black:#0A0A0A;--white:#FAFAFA;--accent:#C8FF00;--muted:#666;--panel:#111;}
-html{scroll-behavior:smooth;}
-body{background:var(--bg);color:var(--black);font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;overflow-x:hidden;cursor:none;}
-
-/* CURSOR */
-#cur{position:fixed;width:8px;height:8px;background:var(--black);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .2s,height .2s,background .2s,border-radius .2s;}
-#cur-ring{position:fixed;width:30px;height:30px;border:1px solid rgba(0,0,0,.4);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .3s,height .3s,border-color .3s;}
-body.h #cur{width:6px;height:6px;background:var(--accent);border-radius:50%;}
-body.h #cur-ring{width:44px;height:44px;border-color:var(--accent);}
-
-/* NAV */
-nav{position:fixed;top:0;left:0;right:0;z-index:500;display:flex;justify-content:space-between;align-items:center;padding:0 2rem;height:52px;background:var(--accent);border-bottom:1.5px solid var(--black);}
-.nav-logo{display:flex;align-items:center;gap:.6rem;font-size:.8rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:var(--black);}
-.nav-logo-dot{width:8px;height:8px;background:var(--black);border-radius:50%;}
-.nav-links{display:flex;gap:2rem;}
-.nav-links a{color:var(--black);text-decoration:none;font-size:.72rem;letter-spacing:.15em;text-transform:uppercase;opacity:.7;transition:opacity .2s;}
-.nav-links a:hover{opacity:1;}
-.nav-cta{display:flex;gap:.7rem;}
-.nav-btn{padding:.4rem 1.1rem;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;border:1.5px solid var(--black);background:transparent;color:var(--black);cursor:none;transition:background .2s,color .2s;}
-.nav-btn.filled{background:var(--black);color:var(--accent);}
-.nav-btn:hover{background:var(--black);color:var(--accent);}
-
-/* HERO — PANEL GRID */
-#hero{margin-top:52px;height:calc(100vh - 52px);display:grid;grid-template-columns:1fr 1fr 1fr 1fr;border-bottom:1.5px solid var(--black);}
-.h-panel{position:relative;overflow:hidden;border-right:1.5px solid var(--black);display:flex;flex-direction:column;justify-content:space-between;padding:2rem 1.5rem;cursor:none;transition:flex .6s cubic-bezier(.16,1,.3,1);}
-.h-panel:last-child{border-right:none;}
-.h-panel:hover{flex:2;}
-.h-panel-dark{background:var(--black);}
-.h-panel-accent{background:var(--accent);}
-.h-panel-light{background:var(--bg);}
-.h-panel-mid{background:#1a1a1a;}
-
-.panel-num{font-size:clamp(5rem,12vw,10rem);font-weight:900;line-height:.85;letter-spacing:-.05em;transition:color .3s;}
-.h-panel-dark .panel-num,.h-panel-mid .panel-num{color:rgba(255,255,255,.08);}
-.h-panel-light .panel-num{color:rgba(0,0,0,.06);}
-.h-panel-accent .panel-num{color:rgba(0,0,0,.12);}
-.h-panel:hover .panel-num{color:rgba(255,255,255,.2)!important;}
-.h-panel-light:hover .panel-num,.h-panel-accent:hover .panel-num{color:rgba(0,0,0,.15)!important;}
-
-.panel-label{display:inline-flex;align-items:center;border:1.5px solid;padding:.3rem .8rem;font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;border-radius:999px;}
-.h-panel-dark .panel-label,.h-panel-mid .panel-label{border-color:rgba(255,255,255,.25);color:rgba(255,255,255,.5);}
-.h-panel-light .panel-label{border-color:rgba(0,0,0,.2);color:var(--muted);}
-.h-panel-accent .panel-label{border-color:var(--black);color:var(--black);}
-
-.panel-bottom{}
-.panel-title{font-size:.95rem;font-weight:700;line-height:1.4;margin-bottom:.4rem;}
-.h-panel-dark .panel-title,.h-panel-mid .panel-title{color:var(--white);}
-.h-panel-light .panel-title{color:var(--black);}
-.h-panel-accent .panel-title{color:var(--black);}
-.panel-sub{font-size:.68rem;line-height:1.6;opacity:.5;}
-.h-panel-dark .panel-sub,.h-panel-mid .panel-sub{color:var(--white);}
-.panel-arrow{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.9rem;margin-top:.8rem;transition:transform .25s;}
-.h-panel-dark .panel-arrow,.h-panel-mid .panel-arrow{background:rgba(255,255,255,.1);color:var(--white);}
-.h-panel-light .panel-arrow{background:var(--black);color:var(--bg);}
-.h-panel-accent .panel-arrow{background:var(--black);color:var(--accent);}
-.h-panel:hover .panel-arrow{transform:translateX(4px);}
-
-/* CENTER PANEL (panel 1) special */
-.h-panel-1{grid-column:1;background:var(--black);}
-.hero-name-wrap{position:absolute;bottom:2rem;left:1.5rem;right:1.5rem;}
-.hero-name{font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:900;color:var(--white);line-height:1;letter-spacing:-.04em;}
-.hero-name .acc{color:var(--accent);}
-.hero-role{font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:.6rem;}
-
-/* BIG STAT */
-.h-stat{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;}
-.h-stat-n{font-size:clamp(3rem,7vw,6rem);font-weight:900;line-height:1;letter-spacing:-.04em;}
-.h-stat-l{font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;margin-top:.3rem;opacity:.5;}
-
-/* MARQUEE */
-.marquee-strip{overflow:hidden;padding:.9rem 0;border-bottom:1.5px solid var(--black);background:var(--black);}
-.marquee-track{display:flex;white-space:nowrap;animation:mq 16s linear infinite;}
-.marquee-track span{font-size:.65rem;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.3);padding:0 1.5rem;}
-.marquee-track .dot{color:var(--accent);}
-@keyframes mq{from{transform:translateX(0);}to{transform:translateX(-50%);}}
-
-/* WORK SECTION */
-#work{padding:0;}
-.work-header{display:grid;grid-template-columns:auto 1fr auto;align-items:end;gap:2rem;padding:3rem 2.5rem 1.5rem;border-bottom:1.5px solid var(--black);}
-.work-idx{font-size:.65rem;letter-spacing:.2em;color:var(--muted);font-family:monospace;}
-.work-title-big{font-size:clamp(2.5rem,5vw,4rem);font-weight:900;letter-spacing:-.04em;}
-.filter-bar{display:flex;gap:.5rem;}
-.filter-btn{padding:.38rem 1rem;font-size:.65rem;letter-spacing:.14em;text-transform:uppercase;border:1.5px solid var(--black);background:transparent;color:var(--black);cursor:none;transition:all .2s;}
-.filter-btn.active,.filter-btn:hover{background:var(--black);color:var(--accent);}
-
-/* PROJECT ROWS */
-.proj-row{display:grid;grid-template-columns:3.5rem 1fr 10rem 5rem;align-items:center;gap:2rem;padding:1.4rem 2.5rem;border-bottom:1.5px solid rgba(0,0,0,.08);cursor:none;position:relative;overflow:hidden;transition:padding-left .4s cubic-bezier(.16,1,.3,1);}
-.proj-row::before{content:'';position:absolute;inset:0;background:var(--black);transform:scaleX(0);transform-origin:left;transition:transform .45s cubic-bezier(.16,1,.3,1);z-index:0;}
-.proj-row:hover::before{transform:scaleX(1);}
-.proj-row:hover{padding-left:3rem;}
-.proj-row *{position:relative;z-index:1;transition:color .3s;}
-.proj-row:hover .pn{color:rgba(255,255,255,.2);}
-.proj-row:hover .ptitle{color:var(--white);}
-.proj-row:hover .pcat{color:rgba(255,255,255,.35);}
-.proj-row:hover .pyear{color:var(--accent);}
-.pn{font-family:monospace;font-size:.7rem;color:var(--muted);}
-.ptitle{font-size:clamp(.95rem,1.8vw,1.3rem);font-weight:700;letter-spacing:-.02em;}
-.pcat{font-size:.65rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);}
-.pyear{font-family:monospace;font-size:.68rem;color:var(--muted);text-align:right;}
-.proj-row.hidden{display:none;}
-
-/* FLOAT IMG */
-#fimg{position:fixed;pointer-events:none;z-index:300;width:220px;height:140px;opacity:0;transform:scale(.88) rotate(-2deg);transition:opacity .25s,transform .25s;border:1.5px solid var(--black);overflow:hidden;}
-#fimg.on{opacity:1;transform:scale(1) rotate(0);}
-.fimg-inner{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.4rem;position:relative;}
-.fimg-num{font-size:4rem;font-weight:900;line-height:1;letter-spacing:-.05em;opacity:.15;}
-.fimg-tag{position:absolute;bottom:.6rem;left:.6rem;font-size:.55rem;letter-spacing:.18em;text-transform:uppercase;padding:.25rem .6rem;border:1px solid;border-radius:999px;}
-
-/* AWARDS SECTION */
-#awards{border-top:1.5px solid var(--black);}
-.awards-grid{display:grid;grid-template-columns:repeat(4,1fr);border-top:1.5px solid var(--black);}
-.award-panel{padding:2.5rem 2rem;border-right:1.5px solid var(--black);position:relative;overflow:hidden;cursor:none;}
-.award-panel:last-child{border-right:none;}
-.award-panel::after{content:'';position:absolute;bottom:0;left:0;width:100%;height:2px;background:var(--accent);transform:scaleX(0);transform-origin:left;transition:transform .4s cubic-bezier(.16,1,.3,1);}
-.award-panel:hover::after{transform:scaleX(1);}
-.award-year{font-family:monospace;font-size:.65rem;color:var(--muted);letter-spacing:.1em;margin-bottom:1.5rem;}
-.award-big-n{font-size:4rem;font-weight:900;line-height:.9;letter-spacing:-.05em;color:rgba(0,0,0,.07);margin-bottom:1rem;}
-.award-name{font-size:.88rem;font-weight:700;line-height:1.4;margin-bottom:.4rem;}
-.award-org{font-size:.7rem;color:var(--muted);letter-spacing:.05em;}
-
-/* ABOUT */
-#about{border-top:1.5px solid var(--black);display:grid;grid-template-columns:1fr 1fr;min-height:70vh;}
-.about-left{background:var(--black);padding:4rem 3rem;display:flex;flex-direction:column;justify-content:space-between;border-right:1.5px solid var(--accent);}
-.about-eyebrow{font-size:.65rem;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:2rem;}
-.about-phil{font-size:clamp(1.2rem,2.2vw,1.7rem);font-weight:400;color:var(--white);line-height:1.65;}
-.about-phil strong{font-weight:900;color:var(--accent);}
-.about-stats-row{display:flex;gap:2.5rem;margin-top:3rem;}
-.astat-n{font-size:2.2rem;font-weight:900;color:var(--white);line-height:1;}
-.astat-n span{color:var(--accent);}
-.astat-l{font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-top:.3rem;}
-
-.about-right{padding:4rem 3rem;display:flex;flex-direction:column;gap:2.5rem;}
-.skill-block{}
-.skill-block-title{font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:.9rem;padding-bottom:.5rem;border-bottom:1px solid var(--black);}
-.tag-wrap{display:flex;flex-wrap:wrap;gap:.4rem;}
-.tag{padding:.3rem .8rem;font-size:.68rem;border:1.5px solid var(--black);letter-spacing:.04em;transition:background .2s,color .2s;cursor:none;}
-.tag:hover{background:var(--black);color:var(--accent);}
-
-/* TIMELINE */
-#timeline{background:var(--black);padding:5rem 2.5rem;border-top:1.5px solid var(--accent);}
-.tl-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:3.5rem;padding-bottom:1.2rem;border-bottom:1px solid rgba(255,255,255,.1);}
-.tl-idx{font-size:.65rem;letter-spacing:.2em;color:rgba(255,255,255,.25);font-family:monospace;}
-.tl-title{font-size:clamp(2rem,4vw,3.5rem);font-weight:900;color:var(--white);letter-spacing:-.04em;}
-.tl-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:0;border-left:1px solid rgba(255,255,255,.1);}
-.tl-item{padding:2rem 1.5rem;border-right:1px solid rgba(255,255,255,.1);position:relative;}
-.tl-item.on .tl-dot-bar{background:var(--accent);}
-.tl-item.on .tl-item-year{color:var(--accent);}
-.tl-dot-bar{height:2px;background:rgba(255,255,255,.1);margin-bottom:1.5rem;transition:background .3s;}
-.tl-item-year{font-family:monospace;font-size:.65rem;color:rgba(255,255,255,.3);letter-spacing:.1em;margin-bottom:.7rem;}
-.tl-item-title{font-size:.85rem;font-weight:700;color:var(--white);line-height:1.4;margin-bottom:.4rem;}
-.tl-item.on .tl-item-title{color:var(--accent);}
-.tl-item-desc{font-size:.7rem;color:rgba(255,255,255,.35);line-height:1.65;}
-
-/* CONTACT */
-#contact{background:var(--bg);border-top:1.5px solid var(--black);display:grid;grid-template-columns:1fr 1fr;min-height:60vh;}
-.contact-left{padding:5rem 3rem;display:flex;flex-direction:column;justify-content:space-between;border-right:1.5px solid var(--black);}
-.contact-eyebrow{font-size:.65rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-bottom:1.5rem;}
-.contact-big{font-size:clamp(2.5rem,6vw,5.5rem);font-weight:900;line-height:.92;letter-spacing:-.05em;}
-.contact-big span{color:var(--accent);-webkit-text-stroke:1px var(--black);}
-.contact-right{padding:5rem 3rem;display:flex;flex-direction:column;justify-content:space-between;}
-.contact-info{}
-.contact-info-label{font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:.6rem;}
-.contact-info-val{font-size:.9rem;font-weight:700;letter-spacing:-.01em;margin-bottom:2rem;}
-.cta-wrap{display:flex;flex-direction:column;gap:.7rem;}
-.cta-btn{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.5rem;font-size:.75rem;letter-spacing:.15em;text-transform:uppercase;text-decoration:none;border:1.5px solid var(--black);color:var(--black);cursor:none;transition:all .25s;}
-.cta-btn:hover,.cta-btn.primary{background:var(--black);color:var(--accent);}
-.cta-btn.primary{background:var(--black);}
-.cta-arrow{font-size:1rem;}
-
-footer{background:var(--black);padding:1.2rem 2.5rem;display:flex;justify-content:space-between;align-items:center;}
-footer span{font-size:.62rem;letter-spacing:.1em;color:rgba(255,255,255,.2);}
-.footer-acc{color:var(--accent)!important;opacity:1!important;}
-
-/* REVEAL */
-.rv{opacity:0;transform:translateY(28px);transition:opacity .7s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1);}
-.rv.vis{opacity:1;transform:none;}
-
-@media(max-width:900px){
-  #hero{grid-template-columns:1fr 1fr;}
-  .h-panel:nth-child(3),.h-panel:nth-child(4){display:none;}
-  .awards-grid{grid-template-columns:1fr 1fr;}
-  #about{grid-template-columns:1fr;}
-  #contact{grid-template-columns:1fr;}
-  .tl-grid{grid-template-columns:1fr 1fr;}
-  .proj-row{grid-template-columns:3rem 1fr 6rem;}
-  .pyear{display:none;}
-}
-@media(max-width:600px){
-  nav{padding:0 1rem;}
-  .nav-links{display:none;}
-  #hero{grid-template-columns:1fr;}
-  .h-panel:not(:first-child){display:none;}
-  .awards-grid{grid-template-columns:1fr;}
-  .tl-grid{grid-template-columns:1fr;}
-  .about-right,.about-left,.contact-left,.contact-right{padding:2.5rem 1.5rem;}
-}
-</style>
+<title>Portfolio</title>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-<div id="cur"></div>
-<div id="cur-ring"></div>
-<div id="fimg"><div class="fimg-inner"><div class="fimg-num" id="fn"></div><div class="fimg-tag" id="ft"></div></div></div>
+<div class="stage" id="stage">
 
-<!-- NAV -->
-<nav>
-  <div class="nav-logo"><div class="nav-logo-dot"></div>Jane Kim</div>
-  <div class="nav-links">
-    <a href="#work">Work</a>
-    <a href="#awards">Awards</a>
-    <a href="#about">About</a>
-    <a href="#contact">Contact</a>
+  <!-- ===================== HEADER ===================== -->
+  <div class="head">
+    <!-- 좌측 상단: 직함/소개 (원하는 텍스트로 교체) -->
+    <div class="brand">Product Designer<br>&amp; Frontend Developer</div>
+    <!-- 우측 상단: 메인 타이틀
+    <h1 class="hero-title">CRAFTING FORM,<br>FUNCTION &amp; FEELING</h1>-->
+    <!-- CONTACT 버튼 -->
+    <button class="contact-btn" id="contactBtn">CONTACT</button>
   </div>
-  <div class="nav-cta">
-    <button class="nav-btn">Portfolio</button>
-    <button class="nav-btn filled">Get in Touch →</button>
-  </div>
-</nav>
 
-<!-- HERO PANELS -->
-<div id="hero">
-  <!-- Panel 1: Identity -->
-  <div class="h-panel h-panel-dark h-panel-1">
-    <div class="panel-num">01</div>
-    <div class="hero-name-wrap">
-      <div class="hero-role">UI/UX & Brand Designer · Seoul</div>
-      <div class="hero-name">Kim<br><span class="acc">Jane.</span></div>
-    </div>
-  </div>
-  <!-- Panel 2: UX -->
-  <div class="h-panel h-panel-light">
-    <div>
-      <div class="panel-num">02</div>
-      <div class="h-stat" style="position:relative;transform:none;top:auto;left:auto;text-align:left;margin-top:1rem;">
-        <div class="h-stat-n" style="font-size:3.5rem;">1.8<span style="color:var(--accent);font-size:2rem;">×</span></div>
-        <div class="h-stat-l">전환율 개선</div>
+  <!-- 상세페이지 닫기 버튼 -->
+  <button class="close-btn" id="closeBtn" aria-label="Close">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+      <path d="M6 6l12 12M18 6L6 18"/></svg>
+  </button>
+
+  
+  <div class="grid" id="grid"></div>
+
+  <!-- ===================== CONTACT MODAL ===================== -->
+  <div class="contact" id="contact">
+    <button class="contact-close" id="contactClose" aria-label="Close contact">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+        <path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+    <div class="contact-card">
+      <h3>반갑습니다, <br> 김제인입니다.</h3>
+      <div class="contact-list">
+        <a href="mailto:rlawpdls0120@gmail.com">rlawpdls0120@gmail.com</a>
+        <a href="tel:+821055779097">+82 10 5577 9097</a>
       </div>
-    </div>
-    <div class="panel-bottom">
-      <div class="panel-label">UX/UI Design</div>
-      <div class="panel-title" style="margin-top:.8rem;">사용자 경험<br>설계 & 개선</div>
-      <div class="panel-arrow">→</div>
-    </div>
-  </div>
-  <!-- Panel 3: Brand -->
-  <div class="h-panel h-panel-accent">
-    <div>
-      <div class="panel-num" style="color:rgba(0,0,0,.1);">03</div>
-    </div>
-    <div class="panel-bottom">
-      <div class="panel-label">Brand Identity</div>
-      <div class="panel-title" style="margin-top:.8rem;">브랜드 아이덴티티<br>& 시스템 설계</div>
-      <div class="panel-arrow">→</div>
-    </div>
-  </div>
-  <!-- Panel 4: Strategy -->
-  <div class="h-panel h-panel-mid">
-    <div>
-      <div class="panel-num">04</div>
-      <div style="margin-top:1rem;">
-        <div class="h-stat-n" style="font-size:3.5rem;color:var(--white);">8<span style="color:var(--accent);font-size:2rem;">%</span></div>
-        <div class="h-stat-l" style="color:rgba(255,255,255,.35);">CTR 달성 (2%→8%)</div>
-      </div>
-    </div>
-    <div class="panel-bottom">
-      <div class="panel-label">Strategy</div>
-      <div class="panel-title" style="margin-top:.8rem;">전략 기획<br>& 성과 중심 디자인</div>
-      <div class="panel-arrow">→</div>
-    </div>
-  </div>
-</div>
-
-<!-- MARQUEE -->
-<div class="marquee-strip">
-  <div class="marquee-track" id="mtrack"></div>
-</div>
-
-<!-- WORK -->
-<section id="work">
-  <div class="work-header rv">
-    <span class="work-idx">01 — Selected Work</span>
-    <h2 class="work-title-big">Projects</h2>
-    <div class="filter-bar" id="fbar"></div>
-  </div>
-  <div id="plist"></div>
-</section>
-
-<!-- AWARDS -->
-<section id="awards">
-  <div class="work-header rv" style="padding:3rem 2.5rem 1.5rem;">
-    <span class="work-idx">02 — Recognition</span>
-    <h2 class="work-title-big">Awards</h2>
-  </div>
-  <div class="awards-grid rv" id="awards-grid"></div>
-</section>
-
-<!-- ABOUT -->
-<section id="about">
-  <div class="about-left rv">
-    <div>
-      <div class="about-eyebrow">02 — About</div>
-      <p class="about-phil">
-        <strong>보이지 않는 니즈를 발견해</strong><br>경험으로 설계하는 디자이너.<br><br>
-        사용자 경험 설계와 전략 기획을 기반으로 프로젝트 전 과정을 체계적으로 관리하며, 개발 관점을 고려한 소통으로 구현까지 완성도 있게 연결합니다.
-      </p>
-    </div>
-    <div class="about-stats-row">
-      <div><div class="astat-n">5<span>+</span></div><div class="astat-l">Projects</div></div>
-      <div><div class="astat-n">1.8<span>×</span></div><div class="astat-l">전환율</div></div>
-      <div><div class="astat-n">4<span>×</span></div><div class="astat-l">Awards</div></div>
-    </div>
-  </div>
-  <div class="about-right rv">
-    <div class="skill-block">
-      <div class="skill-block-title">Design Skills</div>
-      <div class="tag-wrap">
-        <span class="tag">UX Research</span><span class="tag">IA Design</span><span class="tag">Wireframing</span>
-        <span class="tag">Prototyping</span><span class="tag">Usability Test</span><span class="tag">Brand Identity</span>
-        <span class="tag">Visual Design</span><span class="tag">Interaction Design</span><span class="tag">Design System</span>
-      </div>
-    </div>
-    <div class="skill-block">
-      <div class="skill-block-title">Tools</div>
-      <div class="tag-wrap">
-        <span class="tag">Figma</span><span class="tag">FigJam</span><span class="tag">Framer</span>
-        <span class="tag">Adobe Illustrator</span><span class="tag">Photoshop</span>
-        <span class="tag">HTML / CSS / JS</span><span class="tag">Notion</span>
-      </div>
-    </div>
-    <div class="skill-block">
-      <div class="skill-block-title">Languages</div>
-      <div class="tag-wrap">
-        <span class="tag">한국어 (Native)</span><span class="tag">English (Intermediate)</span>
+      <div class="contact-social">
+        <!--
+        <a href="#">Instagram</a>
+        <a href="#">Behance</a>
+        <a href="#">LinkedIn</a>-->
       </div>
     </div>
   </div>
-</section>
 
-<!-- TIMELINE -->
-<section id="timeline">
-  <div class="tl-header rv">
-    <span class="tl-idx">03 — Career</span>
-    <h2 class="tl-title">Growth</h2>
-  </div>
-  <div class="tl-grid rv" id="tlgrid"></div>
-</section>
+</div><!-- /stage -->
 
-<!-- CONTACT -->
-<section id="contact">
-  <div class="contact-left rv">
-    <div>
-      <div class="contact-eyebrow">Ready to collaborate</div>
-      <h2 class="contact-big">Let's<br>make<br><span>great.</span></h2>
-    </div>
-    <div style="font-size:.72rem;color:var(--muted);line-height:1.7;">새로운 협업, 프리랜서 프로젝트,<br>가벼운 커피챗도 언제나 환영합니다.</div>
-  </div>
-  <div class="contact-right rv">
-    <div class="contact-info">
-      <div class="contact-info-label">Email</div>
-      <div class="contact-info-val">rlawpdls0120@gmail.com</div>
-      <div class="contact-info-label">Phone</div>
-      <div class="contact-info-val">(+82) 10-5577-9097</div>
-      <div class="contact-info-label">Location</div>
-      <div class="contact-info-val">Seoul, Korea</div>
-    </div>
-    <div class="cta-wrap">
-      <a href="mailto:rlawpdls0120@gmail.com" class="cta-btn primary">✉ Email me <span class="cta-arrow">→</span></a>
-      <a href="#" class="cta-btn">LinkedIn <span class="cta-arrow">↗</span></a>
-      <a href="#" class="cta-btn">Behance <span class="cta-arrow">↗</span></a>
-    </div>
-  </div>
-</section>
-
-<footer>
-  <span>© 2026 Jane Kim. All rights reserved.</span>
-  <span class="footer-acc">UI/UX & Brand Designer</span>
-  <span>Seoul, KR</span>
-</footer>
-
-<script>
-/* ── PROJECTS ── */
-const projects=[
-  {num:'01',title:'Findo — 핀테크 앱 리디자인',cat:'UX/UI',year:'2025',color:'#0d1117',tcol:'#C8FF00'},
-  {num:'02',title:'Bloom — 식물 케어 서비스',cat:'UX/UI',year:'2025',color:'#0d1a10',tcol:'#C8FF00'},
-  {num:'03',title:'Vora — 제로웨이스트 브랜드',cat:'Branding',year:'2024',color:'#1a0d0d',tcol:'#C8FF00'},
-  {num:'04',title:'SERO — SaaS 랜딩페이지',cat:'UX/UI',year:'2024',color:'#0d0d1a',tcol:'#C8FF00'},
-  {num:'05',title:'Arche — 로컬 카페 브랜딩',cat:'Branding',year:'2023',color:'#1a150d',tcol:'#C8FF00'},
-  {num:'06',title:'Noor — 뷰티 브랜드 아이덴티티',cat:'Branding',year:'2023',color:'#1a0d15',tcol:'#C8FF00'},
-];
-const cats=['All','UX/UI','Branding'];
-
-/* filter */
-const fbar=document.getElementById('fbar');
-cats.forEach((c,i)=>{
-  const b=document.createElement('button');
-  b.className='filter-btn'+(i===0?' active':'');
-  b.textContent=c;b.dataset.cat=c;
-  b.addEventListener('click',()=>{
-    document.querySelectorAll('.filter-btn').forEach(x=>x.classList.remove('active'));
-    b.classList.add('active');
-    document.querySelectorAll('.proj-row').forEach(p=>{
-      p.classList.toggle('hidden',c!=='All'&&p.dataset.cat!==c);
-    });
-  });
-  fbar.appendChild(b);
-});
-
-const plist=document.getElementById('plist');
-const fimg=document.getElementById('fimg');
-const fn=document.getElementById('fn');
-const ft=document.getElementById('ft');
-
-projects.forEach(p=>{
-  const el=document.createElement('div');
-  el.className='proj-row rv';el.dataset.cat=p.cat;
-  el.innerHTML=`<span class="pn">${p.num}</span><span class="ptitle">${p.title}</span><span class="pcat">${p.cat}</span><span class="pyear">${p.year}</span>`;
-  el.addEventListener('mouseenter',()=>{
-    fn.textContent=p.num;fn.style.color=p.tcol;
-    ft.textContent=p.cat;ft.style.borderColor='rgba(255,255,255,.3)';ft.style.color='rgba(255,255,255,.5)';
-    fimg.style.background=p.color;fimg.classList.add('on');
-  });
-  el.addEventListener('mouseleave',()=>fimg.classList.remove('on'));
-  plist.appendChild(el);
-});
-
-/* ── AWARDS ── */
-const awards=[
-  {year:'2025',num:'01',name:'AI Fintech Startup Challenge 우수상',org:'한국핀테크산업협회'},
-  {year:'2025',num:'02',name:'학생 창업유망팀 300+ 본선 진출',org:'중소벤처기업부'},
-  {year:'2024',num:'03',name:'대학 UX 디자인 경진대회 최우수상',org:'한국디자인진흥원'},
-  {year:'2023',num:'04',name:'서울 청년 창업 아이디어 공모전 장려상',org:'서울특별시'},
-];
-const ag=document.getElementById('awards-grid');
-awards.forEach(a=>{
-  const el=document.createElement('div');
-  el.className='award-panel';
-  el.innerHTML=`<div class="award-year">${a.year}</div><div class="award-big-n">${a.num}</div><div class="award-name">${a.name}</div><div class="award-org">${a.org}</div>`;
-  ag.appendChild(el);
-});
-
-/* ── TIMELINE ── */
-const timeline=[
-  {year:'2022',title:'UX 설계 학습 시작',desc:'HCI·시각 커뮤니케이션·사용성 테스트 수강. 리서치부터 검증까지 전 과정 학습.',on:false},
-  {year:'2023',title:'서비스 디자인 프로젝트',desc:'IA 설계·와이어프레임·반복 개선 프로세스 다수 수행. HTML/CSS/JS 구현 경험.',on:false},
-  {year:'2024',title:'창업팀 디자인 리드',desc:'팀 내 서비스 디자인 리드. 아이덴티티·프로토타입 전담. 학생 창업유망팀 300+ 본선.',on:false},
-  {year:'2025.04',title:'Finology Inc.\nProduct Designer I',desc:'리디자인으로 전환율 1.8× 달성. CTR 2%→8% 개선.',on:true},
-  {year:'2025',title:'AI Fintech Challenge\n우수상',desc:'금융 서비스 UX 혁신 프로젝트 수상. AI 기반 UX 설계 역량 인정.',on:true},
-];
-const tg=document.getElementById('tlgrid');
-timeline.forEach(t=>{
-  const el=document.createElement('div');
-  el.className='tl-item'+(t.on?' on':'');
-  el.innerHTML=`<div class="tl-dot-bar"></div><div class="tl-item-year">${t.year}</div><div class="tl-item-title">${t.title.replace('\n','<br>')}</div><div class="tl-item-desc">${t.desc}</div>`;
-  tg.appendChild(el);
-});
-
-/* ── MARQUEE ── */
-const words=['UX Design','Brand Identity','Interaction','Prototyping','User Research','Visual Design','Design System','Strategy','Product Design','HCI'];
-const mt=document.getElementById('mtrack');
-const rep=[...words,...words,...words,...words];
-mt.innerHTML=rep.map(w=>`<span>${w}</span><span class="dot"> ✦ </span>`).join('');
-
-/* ── CURSOR ── */
-const cur=document.getElementById('cur'),ring=document.getElementById('cur-ring');
-let mx=0,my=0,rx=0,ry=0;
-document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';});
-(function loop(){
-  rx+=(mx-rx)*.1;ry+=(my-ry)*.1;
-  ring.style.left=rx+'px';ring.style.top=ry+'px';
-  fimg.style.left=(mx+20)+'px';fimg.style.top=(my-70)+'px';
-  requestAnimationFrame(loop);
-})();
-document.querySelectorAll('a,button,.proj-row,.award-panel,.tag,.filter-btn').forEach(el=>{
-  el.addEventListener('mouseenter',()=>document.body.classList.add('h'));
-  el.addEventListener('mouseleave',()=>document.body.classList.remove('h'));
-});
-
-/* ── REVEAL ── */
-const obs=new IntersectionObserver(entries=>{
-  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis');});
-},{threshold:.06,rootMargin:'0px 0px -30px 0px'});
-document.querySelectorAll('.rv').forEach(el=>obs.observe(el));
-</script>
+<script src="projects.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
